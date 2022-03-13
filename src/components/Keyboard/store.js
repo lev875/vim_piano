@@ -16,12 +16,41 @@ const startKey = 40
 const initialState =
   keys
     .map(
-      (n, i) => ({...keys[i], frequency: keyFrequency(startKey + i) })
+      (key, i) =>
+        ({
+          ...key,
+          frequency: keyFrequency(startKey + i),
+          isPlaying: false
+        })
+    )
+
+const playReducer = ( state, action ) =>
+  state
+    .map(
+      key =>
+        key.button === action.payload
+          ? { ...key, isPlaying: true }
+          : key
+    )
+
+const stopReducer = ( state, action ) =>
+  state
+    .map(
+      key =>
+        key.button === action.payload
+          ? { ...key, isPlaying: false }
+          : key
     )
 
 export const keysSlice = createSlice({
   name: 'keys',
-  initialState
+  initialState,
+  reducers: {
+    play: playReducer,
+    stop: stopReducer
+  }
 })
+
+export const { play, stop } = keysSlice.actions
 
 export const selectKeys = state => state.keys

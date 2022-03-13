@@ -1,19 +1,8 @@
 import react, { useState } from "react"
 
-function Key({ name, button, frequency }) {
+function Key({ name, button, frequency, isPlaying }) {
 
-  // const [ button, setButton ] = useState(0);
-  // const [ isEditing, setIsEditing ] = useState(false);
-
-  // const eventHandler = event => {
-  //   if (!isEditing)
-  //     return
-  //   setButton(event.code)
-  //   setIsEditing(false)
-  //   event.target.value = ''
-  // }
-
-  return <div class="key">
+  return <div className="key">
     <div>
       <span>Name: </span><span>{name} </span>
     </div>
@@ -23,6 +12,7 @@ function Key({ name, button, frequency }) {
     <div>
       <span>Frequency: </span><span>{frequency}</span>
     </div>
+    { isPlaying && <span>Playing</span> }
   </div>
 }
 
