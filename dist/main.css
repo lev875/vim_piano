@@ -1,0 +1,10 @@
+#keyboard {
+  display: flex;
+  flex-direction: row;
+}
+
+.key {
+  border: 0.1em solid black;
+  display: flex;
+  flex-direction: column;
+}
