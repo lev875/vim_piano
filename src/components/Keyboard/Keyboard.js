@@ -5,6 +5,7 @@ import { dispatchTimeout as _dispatchTimeout } from "../../util";
 import Key from "../Key/Key";
 import { play, stop, selectKeys } from "./store"
 
+// TODO: Move to redux
 const sustain = 300 // ms
 
 function Keyboard() {

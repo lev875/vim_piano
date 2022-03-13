@@ -7,11 +7,12 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    tty: true
-    stdin_open: true
-    entrypoint: yarn dev
+    entrypoint: /bin/bash -c
+    command: [ 'yarn dev' ]
     environment:
       APP_HOST: '0.0.0.0'
       APP_PORT: '5000'
+      APP_LIVERELOAD_PORT: '5001'
     ports:
       - "5000:5000"
+      - "5001:5001"

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+// https://en.wikipedia.org/wiki/Piano_key_frequencies
 export const keyFrequency = n => Math.pow(2, (n - 49) / 12) * 440
 
 const keys = [

@@ -4,31 +4,49 @@ import nodeResolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import replace from "@rollup/plugin-replace"
 import livereload from "rollup-plugin-livereload"
+import { terser } from "rollup-plugin-terser"
 
+const isProduction = process.env.NODE_ENV === 'production'
+
+/**
+ * @type { import('rollup').RollupOptions }
+ */
 export default {
   input: "src/main.js",
   output: {
-    file: "dist/bundle.js",
+    file: "build/bundle.js",
     format: "iife",
-    sourcemap: true
+    sourcemap: !isProduction
   },
   plugins: [
     nodeResolve(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify( 'development' ),
+      'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
       preventAssignment: false
     }),
     babel({
+      babelHelpers: 'runtime',
       presets: [
-        ["@babel/preset-react", { runtime: "automatic" } ]
+        [ "@babel/preset-react", { runtime: "automatic" } ]
       ]
     }),
-    commonjs(),
-    serve({
-      contentBase: "dist",
-      host: process.env.APP_HOST,
-      port: process.env.APP_PORT
-    }),
-    livereload({ watch: "dist" })
+    commonjs()
   ]
+  .concat(
+    isProduction
+      ? [ terser() ]
+      : [
+        serve({
+          contentBase: "build",
+          host: process.env.APP_HOST,
+          port: process.env.APP_PORT
+        }),
+        livereload({ watch: "dist", port: process.env.APP_LIVERELOAD_PORT })
+      ]
+  ),
+  // Suppress 'this is undefined' message caused by redux-toolkit
+  onwarn: (message, warn) => {
+    if (message.code === 'THIS_IS_UNDEFINED') return
+    warn(message)
+  }
 }
