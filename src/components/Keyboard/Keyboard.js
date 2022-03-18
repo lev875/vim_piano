@@ -6,7 +6,7 @@ import Key from "../Key/Key";
 import { play, stop, selectKeys } from "./store"
 
 // TODO: Move to redux
-const sustain = 300 // ms
+const sustain = 150 // ms
 
 function Keyboard() {
 
@@ -16,11 +16,10 @@ function Keyboard() {
 
   useEffect(
     () => {
-      const eventListener = event => {
-        dispatchTimeout(sustain, stop(event.code))
-        dispatch(play(event.code))
-      }
-      window.addEventListener('keydown', eventListener)
+      const keyDownEvent = event => dispatch(play(event.code))
+      const keyUpEvent = event => dispatchTimeout(sustain, stop(event.code))
+      window.addEventListener('keydown', keyDownEvent)
+      window.addEventListener('keyup', keyUpEvent)
       return () => window.removeEventListener('keydown', eventListener)
     },
     []
