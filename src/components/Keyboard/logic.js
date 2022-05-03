@@ -2,20 +2,28 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 export const context = new AudioContext()
 
-const waveForm = {
-  imag: new Float32Array([0,1,1,1,1,1,1]),
-  real: new Float32Array(7)
-}
+const createConfig = ({ type, waveForm: { imag, real } }) =>
+  type === "custom"
+    ? ({
+      periodicWave: new PeriodicWave(
+        context,
+        {
+          imag: new Float32Array(imag),
+          real: new Float32Array(real)
+        }
+      )
+    })
+    : { type }
 
-export const play = freq => {
+export const play = config => freq => {
   const node = new OscillatorNode(
     context,
     {
-      type: "sine",
       frequency: freq,
-      periodicWave: new PeriodicWave(context, waveForm)
+      ...createConfig(config)
     }
   )
+  console.log(node)
   node.connect(context.destination)
   node.start()
   return node

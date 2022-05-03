@@ -1,18 +1,26 @@
 import react, { useState } from "react"
-import { play } from "../Keyboard/logic"
+import { useSelector } from "react-redux"
+
+import { selectConfig } from "../Keyboard/store"
+import { play as _play } from "../Keyboard/logic"
+
+import style from "./style.css"
 
 function Key({ name, button, frequency, isPlaying }) {
 
   const [node, setNode] = useState(null)
 
+  const config = useSelector(selectConfig)
+  const play = _play(config)
+
   if (!node && isPlaying) {
-    setNode(play(frequency))
+    setNode( play(frequency) )
   } else if (node && !isPlaying) {
     node.stop()
     setNode(null)
   }
 
-  return <div className="key">
+  return <div className={ style.key }>
     <div>
       <span>Name: </span><span>{name} </span>
     </div>

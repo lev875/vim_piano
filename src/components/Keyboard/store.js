@@ -14,44 +14,67 @@ const keys = [
 ]
 
 const startKey = 40
-const initialState =
-  keys
-    .map(
-      (key, i) =>
-        ({
-          ...key,
-          frequency: keyFrequency(startKey + i),
-          isPlaying: false
-        })
-    )
+const initialState = {
+  config: {
+    type: "sine",
+    waveForm: {
+      imag: [0,1,1,1,1,1,1],
+      real: [0,0,0,0,0,0,0]
+    }
+  },
+  keys:
+    keys
+      .map(
+        (key, i) =>
+          ({
+            ...key,
+            frequency: keyFrequency(startKey + i),
+            isPlaying: false
+          })
+      )
+}
 
-const playReducer = ( state, action ) =>
-  state
+const playReducer = ( state, action ) => ({
+  ...state,
+  keys: state.keys
     .map(
       key =>
         key.button === action.payload
           ? { ...key, isPlaying: true }
           : key
     )
+})
 
-const stopReducer = ( state, action ) =>
-  state
+const stopReducer = ( state, action ) => ({
+  ...state,
+  keys: state.keys
     .map(
       key =>
         key.button === action.payload
           ? { ...key, isPlaying: false }
           : key
     )
+})
 
-export const keysSlice = createSlice({
-  name: 'keys',
-  initialState,
-  reducers: {
-    play: playReducer,
-    stop: stopReducer
+const waveTypeReducer = ( state, action ) => ({
+  ...state,
+  config: {
+    ...state.config,
+    type: action.payload
   }
 })
 
-export const { play, stop } = keysSlice.actions
+export const keyboardSlice = createSlice({
+  name: 'keyboard',
+  initialState,
+  reducers: {
+    play: playReducer,
+    stop: stopReducer,
+    changeWaveType: waveTypeReducer
+  }
+})
 
-export const selectKeys = state => state.keys
+export const { play, stop, changeWaveType } = keyboardSlice.actions
+
+export const selectKeys = state => state.keyboard.keys
+export const selectConfig = state => state.keyboard.config

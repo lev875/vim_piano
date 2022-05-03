@@ -1,9 +1,13 @@
 import reac from "react"
 
 import Keyboard from "./Keyboard/Keyboard"
+import Settings from "./Settings/Settings"
 
 function App() {
-  return <Keyboard/>
+  return <div>
+    <Settings/>
+    <Keyboard/>
+  </div>
 }
 
 export default App

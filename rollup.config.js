@@ -2,6 +2,7 @@ import babel from "@rollup/plugin-babel"
 import serve from "rollup-plugin-serve"
 import nodeResolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
+import postcss from "rollup-plugin-postcss"
 import replace from "@rollup/plugin-replace"
 import livereload from "rollup-plugin-livereload"
 import { terser } from "rollup-plugin-terser"
@@ -23,6 +24,10 @@ export default {
     replace({
       'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
       preventAssignment: false
+    }),
+    postcss({
+      extract: true,
+      modules: true
     }),
     babel({
       babelHelpers: 'runtime',
