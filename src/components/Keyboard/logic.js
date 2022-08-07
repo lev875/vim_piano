@@ -2,6 +2,9 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 export const context = new AudioContext()
 
+const gainNode = new GainNode(context, { gain: 0.5 })
+gainNode.connect(context.destination)
+
 const createConfig = ({ type, waveForm: { imag, real } }) =>
   type === "custom"
     ? ({
@@ -15,7 +18,7 @@ const createConfig = ({ type, waveForm: { imag, real } }) =>
     })
     : { type }
 
-export const play = config => freq => {
+const play = config => freq => {
   const node = new OscillatorNode(
     context,
     {
@@ -23,8 +26,13 @@ export const play = config => freq => {
       ...createConfig(config)
     }
   )
-  console.log(node)
-  node.connect(context.destination)
+  gainNode.gain.setValueAtTime(config.volume / 100, 0)
+  node.connect(gainNode)
   node.start()
   return node
 }
+
+const stop = config => node =>
+  node.stop(context.currentTime + config.sustain / 1000)
+
+export const configureContext = config => [ play(config), stop(config) ]

@@ -1,5 +1,3 @@
-import reac from "react"
-
 import Keyboard from "./Keyboard/Keyboard"
 import Settings from "./Settings/Settings"
 

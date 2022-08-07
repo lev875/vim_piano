@@ -1,22 +1,25 @@
-import react, { useState } from "react"
+import { useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 
 import { selectConfig } from "../Keyboard/store"
-import { play as _play } from "../Keyboard/logic"
+import { configureContext } from "../Keyboard/logic"
 
 import style from "./style.css"
 
 function Key({ name, button, frequency, isPlaying }) {
 
-  const [node, setNode] = useState(null)
-
   const config = useSelector(selectConfig)
-  const play = _play(config)
+
+  const [node, setNode] = useState(null)
+  const [play, stop] = useMemo(
+    () => configureContext(config),
+    [config]
+  )
 
   if (!node && isPlaying) {
     setNode( play(frequency) )
   } else if (node && !isPlaying) {
-    node.stop()
+    stop(node)
     setNode(null)
   }
 

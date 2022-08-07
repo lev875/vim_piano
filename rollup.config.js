@@ -3,6 +3,7 @@ import serve from "rollup-plugin-serve"
 import nodeResolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import postcss from "rollup-plugin-postcss"
+import svgr from "@svgr/rollup"
 import replace from "@rollup/plugin-replace"
 import livereload from "rollup-plugin-livereload"
 import { terser } from "rollup-plugin-terser"
@@ -29,6 +30,7 @@ export default {
       extract: true,
       modules: true
     }),
+    svgr(),
     babel({
       babelHelpers: 'runtime',
       presets: [
