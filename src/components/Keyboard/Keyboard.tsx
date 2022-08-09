@@ -13,8 +13,8 @@ function Keyboard() {
 
   useEffect(
     () => {
-      const keyDownEvent = ({ code }) => dispatch(play(code))
-      const keyUpEvent = ({ code }) => dispatch(stop(code))
+      const keyDownEvent = ({ code }: KeyboardEvent) => dispatch(play(code))
+      const keyUpEvent = ({ code }: KeyboardEvent) => dispatch(stop(code))
       window.addEventListener('keydown', keyDownEvent)
       window.addEventListener('keyup', keyUpEvent)
       return () => {

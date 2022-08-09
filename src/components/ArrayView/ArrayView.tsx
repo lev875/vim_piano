@@ -3,19 +3,27 @@ import style from "./style.css"
 import { useDispatch } from "react-redux"
 
 import { addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm } from "../Keyboard/store"
+import { ChangeEvent } from "react"
 
 const NAMES = new Map([
   [ "imag", "Imaginary" ],
   [ "real", "Real" ]
 ])
 
-function ArrayView({ component, array }) {
+interface Arguments {
+  component: "imag" | "real",
+  array: number[]
+}
+
+function ArrayView({ component, array }: Arguments) {
 
   const name = NAMES.get(component)
   const dispatch = useDispatch()
 
-  const change = (e,index) =>
-    dispatch(changeCustomWaveTerm({ component, index, new: e.target.value }))
+  const change = (e: ChangeEvent<HTMLInputElement>, index: number) =>
+    dispatch(changeCustomWaveTerm(
+      { component, index, new: parseInt(e.target.value) }
+    ))
 
   return <div className={ style["flex-row"] }>
     <span className={ style.span }>{ name }</span>

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import ArrayView from "../ArrayView/ArrayView.js";
-import { changeSustain, changeVolume, selectConfig } from "../Keyboard/store.js";
+import ArrayView from "../ArrayView/ArrayView";
+import { setVolume } from "../Keyboard/logic.js";
+import { changeSustain, changeVolume, selectConfig, changeWaveType } from "../Keyboard/store";
 
-import { changeWaveType } from "../Keyboard/store.js"
 import style from "./style.css"
 
 function Settings() {
@@ -12,6 +12,11 @@ function Settings() {
   const config              = useSelector(selectConfig)
   const dispatch            = useDispatch()
   const [ isOpen, setOpen ] = useState(false)
+
+  useEffect(
+    () => setVolume(config.volume),
+    [config.volume]
+  )
 
   return <div>
 
@@ -29,7 +34,7 @@ function Settings() {
           value={ config.volume }
           min={0}
           max={100}
-          onChange={({ target }) => dispatch(changeVolume(target.value))}
+          onChange={({ target }) => dispatch(changeVolume(parseInt(target.value)))}
         />
       </div>
 
@@ -38,7 +43,7 @@ function Settings() {
         <input
           type={"number"}
           value={ config.sustain }
-          onChange={({ target }) => dispatch(changeSustain(target.value))}
+          onChange={({ target }) => dispatch(changeSustain(parseInt(target.value)))}
         />
       </div>
 
@@ -46,7 +51,7 @@ function Settings() {
         <span className={ style.span }>Type: </span>
         <select
           value={ config.type }
-          onChange={ e => dispatch(changeWaveType(e.target.value)) }
+          onChange={ e => dispatch(changeWaveType(e.target.value as OscillatorType)) }
         >
           <option value={ "sine"      }>sine     </option>
           <option value={ "square"    }>square   </option>

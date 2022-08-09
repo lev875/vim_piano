@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { appendToArray, dropFromArray, replaceArrayEl } from "../../util"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RootState } from "../../store/util"
+import { appendToArray, dropFromArray, getObjectProperty, replaceArrayEl } from "../../util"
 
 // https://en.wikipedia.org/wiki/Piano_key_frequencies
-export const keyFrequency = n => Math.pow(2, (n - 49) / 12) * 440
+export const keyFrequency = (n: number) => Math.pow(2, (n - 49) / 12) * 440
 
 const keys = [
   { name: 'C', button: 'KeyA' }, { name: 'C#', button: 'KeyQ' },
@@ -16,9 +17,32 @@ const keys = [
 
 // TODO: Decouple config from store
 const startKey = 40
+
+interface Key {
+  frequency: number
+  isPlaying: boolean
+  name: string
+  button: string
+}
+
+export interface Config {
+  type: OscillatorType
+  volume: number
+  sustain: number
+  waveForm: {
+    imag: number[]
+    real: number[]
+  }
+}
+
+interface State {
+  config: Config
+  keys: Key[]
+}
+
 const initialState = {
   config: {
-    type: "sine",
+    type: "sine" as OscillatorType,
     volume: 50,
     sustain: 150, // ms
     waveForm: {
@@ -38,7 +62,7 @@ const initialState = {
       )
 }
 
-const playReducer = ( state, action ) => ({
+const playReducer = ( state: State, action: PayloadAction<string> ) => ({
   ...state,
   keys: state.keys
     .map(
@@ -49,7 +73,7 @@ const playReducer = ( state, action ) => ({
     )
 })
 
-const stopReducer = ( state, action ) => ({
+const stopReducer = ( state: State, action: PayloadAction<string> ) => ({
   ...state,
   keys: state.keys
     .map(
@@ -60,7 +84,7 @@ const stopReducer = ( state, action ) => ({
     )
 })
 
-const changeVolumeReducer = (state, { payload }) =>
+const changeVolumeReducer = (state: State, { payload }: PayloadAction<number>) =>
   ({
     ...state,
     config: {
@@ -69,7 +93,7 @@ const changeVolumeReducer = (state, { payload }) =>
     }
   })
 
-const changeSustainReducer = (state, { payload }) =>
+const changeSustainReducer = (state: State, { payload }: PayloadAction<number>) =>
   ({
     ...state,
     config: {
@@ -78,7 +102,7 @@ const changeSustainReducer = (state, { payload }) =>
     }
   })
 
-const waveTypeReducer = ( state, action ) => ({
+const waveTypeReducer = ( state: State, action: PayloadAction<OscillatorType> ) => ({
   ...state,
   config: {
     ...state.config,
@@ -86,7 +110,7 @@ const waveTypeReducer = ( state, action ) => ({
   }
 })
 
-const addWaveTermReducer = state =>
+const addWaveTermReducer = (state: State) =>
   ({
     ...state,
     config: {
@@ -98,7 +122,7 @@ const addWaveTermReducer = state =>
     }
   })
 
-const removeWaveTermReducer = state =>
+const removeWaveTermReducer = (state: State) =>
   state.config.waveForm.imag.length <= 2
     ? state
     : {
@@ -112,7 +136,16 @@ const removeWaveTermReducer = state =>
       }
     }
 
-const changeWaveTermReducer = (state, { payload }) =>
+interface ChageWaveTermPayload {
+  component: "imag" | "real",
+  index: number,
+  new: number
+}
+
+const changeWaveTermReducer = (
+  state: State,
+  { payload }: PayloadAction<ChageWaveTermPayload>
+) =>
   payload.index >= state.config.waveForm[payload.component].length
     ? state
     : {
@@ -152,5 +185,5 @@ export const {
   addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm
 } = keyboardSlice.actions
 
-export const selectKeys = state => state.keyboard.keys
-export const selectConfig = state => state.keyboard.config
+export const selectKeys = (state: RootState) => state.keyboard.keys
+export const selectConfig = (state: RootState) => state.keyboard.config

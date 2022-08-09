@@ -5,6 +5,7 @@ import commonjs from "@rollup/plugin-commonjs"
 import postcss from "rollup-plugin-postcss"
 import svgr from "@svgr/rollup"
 import replace from "@rollup/plugin-replace"
+import typescript from "@rollup/plugin-typescript"
 import livereload from "rollup-plugin-livereload"
 import { terser } from "rollup-plugin-terser"
 
@@ -14,7 +15,7 @@ const isProduction = process.env.NODE_ENV === 'production'
  * @type { import('rollup').RollupOptions }
  */
 export default {
-  input: "src/main.js",
+  input: "src/main.tsx",
   output: {
     file: "build/bundle.js",
     format: "iife",
@@ -26,6 +27,7 @@ export default {
       'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
       preventAssignment: false
     }),
+    typescript(),
     postcss({
       extract: true,
       modules: true
