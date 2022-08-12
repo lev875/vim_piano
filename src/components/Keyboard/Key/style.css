@@ -1,0 +1,45 @@
+.key {
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  border-right-width: 0px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-end;
+  text-align: center;
+  font-family: 'Source Code Pro', monospace;
+  font-size: xxx-large;
+  min-height: 1em;
+}
+
+.key:last-of-type {
+  border-right-width: 2px;
+}
+
+.debugKey {
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.black {
+  background-color: black;
+  color: white;
+}
+
+.white {
+  background-color: white;
+  color: black;
+}
+
+.pressed.black {
+  background-color: gray;
+}
+
+.pressed.white {
+  background-color: gray;
+}

@@ -1,8 +1,10 @@
 # VIMPiano
 
 ## TODO
-- Refactor Redux store
 - Refactor CSS, add global classes
-- Figure out how to implement sustain with GainNode
-- Add different modes (piano - note starts to die down immedeately after `keydown`/synth - note continues to play as long as key is pressed, starts to die down after `keyup`)
-- Style
+- Add effects pipeline constructor (delay and stuff)
+- Add keybindings settings
+- Use CSS preprocessing
+- Add different themes?
+- Decompose components
+- Input validation

@@ -1,3 +1,25 @@
+.container {
+  margin-top: 1em;
+}
+
+.innerContainer > div:not(.hidden) {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+}
+
+.innerContainer input {
+  margin-right: 0.5em;
+}
+
+.innerContainer span {
+  width: 10em;
+}
+
+.column {
+  flex-direction: column !important;
+}
+
 .hidden {
   display: none;
 }
@@ -5,13 +27,4 @@
 .open {
   display: flex;
   flex-direction: column;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.span {
-  width: 10em;
 }

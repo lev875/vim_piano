@@ -1,4 +1,5 @@
-import type { Config } from "../Keyboard/store"
+import { generateArray } from "../../util"
+import type { Config } from "../Settings/store"
 
 const AudioContext = window.AudioContext // || window.webkitAudioContext;
 
@@ -37,6 +38,7 @@ export interface NodeAndGain {
   node: OscillatorNode,
   gain: GainNode
 }
+
 const play = (config: Config) => (freq: number) => {
   const gainNode = new GainNode(context, { gain: 1 })
   gainNode.connect(globalGain)
@@ -52,10 +54,23 @@ const play = (config: Config) => (freq: number) => {
   return { node, gain: gainNode } as NodeAndGain
 }
 
+export const resume = ({ gain: gainNode }: NodeAndGain ) =>
+  gainNode.gain.cancelScheduledValues(context.currentTime)
+
 const stop = (config: Config) => ({ node, gain: gainNode }: NodeAndGain) => {
-  const end = context.currentTime + config.sustain / 1000
-  gainNode.gain.exponentialRampToValueAtTime(0.001, end)
-  node.stop(end)
+  const sustainDuration = config.sustain / 1000
+  const currentTime = context.currentTime
+  if (config.sustainStepness > 1) {
+    const array = Float32Array.from(
+      generateArray(15)
+        .map(i => i - 15)
+        .map(i => Math.pow(config.sustainStepness,i))
+        .reverse()
+    )
+    gainNode.gain.setValueCurveAtTime(array, currentTime, sustainDuration)
+  }
+  node.stop(currentTime + sustainDuration)
 }
 
-export const configureContext = (config: Config) => ({ play: play(config), stop: stop(config) })
+export const configureContext = (config: Config) =>
+  ({ play: play(config), stop: stop(config) })

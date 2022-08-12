@@ -1,10 +1,11 @@
 import { Action, Dispatch } from "@reduxjs/toolkit"
 
-export const dispatchTimeout = (dispatch: Dispatch) => (timeout: number, event: Action) =>
-  setTimeout(
-    () => dispatch(event),
-    timeout
-  )
+export const dispatchTimeout = <T,>(dispatch: Dispatch) =>
+  (timeout: number, event: Action<T>) =>
+    setTimeout(
+      () => dispatch(event),
+      timeout
+    )
 
 export const appendToArray = <T,>(a: T[], el: T) => [...a, el]
 export const dropFromArray  = <T,>(a: T[], n: number) =>
@@ -15,3 +16,7 @@ export const replaceArrayEl = <T,>(a: T[], i: number, n: T) =>
 
 export const getObjectProperty = <T, Key extends keyof T>(obj: T) =>
   (property: Key) => obj[property as Key]
+
+
+export const generateArray = (n: number) => [...new Array(n)].map((_,i) => i)
+

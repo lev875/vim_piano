@@ -1,4 +1,25 @@
 .keyboard {
   display: flex;
   flex-direction: row;
+  height: 50vh;
+}
+
+.octaveDisplay {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.octaveDisplay button {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: xxx-large;
+  width: 2em;
+  height: 2em;
+}
+
+.octaveDisplay div {
+  display: inline-grid;
+  align-content: center;
+  font-size: xxx-large;
 }

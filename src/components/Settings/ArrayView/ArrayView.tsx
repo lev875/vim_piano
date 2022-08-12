@@ -2,7 +2,7 @@ import style from "./style.css"
 
 import { useDispatch } from "react-redux"
 
-import { addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm } from "../Keyboard/store"
+import { addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm } from "../store"
 import { ChangeEvent } from "react"
 
 const NAMES = new Map([
@@ -22,7 +22,7 @@ function ArrayView({ component, array }: Arguments) {
 
   const change = (e: ChangeEvent<HTMLInputElement>, index: number) =>
     dispatch(changeCustomWaveTerm(
-      { component, index, new: parseInt(e.target.value) }
+      { component, index, new: parseFloat(e.target.value) }
     ))
 
   return <div className={ style["flex-row"] }>
@@ -37,6 +37,7 @@ function ArrayView({ component, array }: Arguments) {
             className={ style.input }
             onChange={ e => change(e,i) }
             type={ "number" }
+            step={ 0.01 }
             value={ v }/>
       )
     }</div>

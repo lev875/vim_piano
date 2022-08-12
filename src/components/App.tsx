@@ -3,8 +3,8 @@ import Settings from "./Settings/Settings"
 
 function App() {
   return <div>
-    <Settings/>
     <Keyboard/>
+    <Settings/>
   </div>
 }
 
