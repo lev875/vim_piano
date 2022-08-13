@@ -1,28 +1,34 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 import style from "./style.css"
 
 import Key from "./Key/Key"
 
 import { play, stop, selectKeys, liftKey, shiftOctave, selectOctave } from "./store"
-import { dispatchTimeout as _dispatchTimeout} from "../../util";
-import { selectConfig } from "../Settings/store";
+import { dispatchTimeout as _dispatchTimeout} from "../../util"
+import { selectConfig } from "../Settings/store"
 
 function Keyboard() {
 
   const octave          = useSelector(selectOctave)
   const keys            = useSelector(selectKeys)
-  const dispatch        = useDispatch();
+  const dispatch        = useDispatch()
   const { sustain }     = useSelector(selectConfig)
   const dispatchTimeout = _dispatchTimeout(dispatch)
 
   useEffect(
     () => {
+      // TODO: Refactor
       const keyPressEvent = (e: KeyboardEvent) => {
-        e.preventDefault()
-        if (e.code === 'Space') dispatch(shiftOctave(-1))
-        if (e.code === 'Enter') dispatch(shiftOctave(1) )
+        if (e.code === 'Space') {
+          e.preventDefault()
+          dispatch(shiftOctave(-1))
+        }
+        if (e.code === 'Enter') {
+          e.preventDefault()
+          dispatch(shiftOctave(1) )
+        }
       }
       const keyDownEvent = ({ code }: KeyboardEvent) => dispatch(play(code))
       const keyUpEvent = ({ code }: KeyboardEvent) => {
@@ -35,6 +41,7 @@ function Keyboard() {
       return () => {
         window.removeEventListener('keydown', keyDownEvent)
         window.removeEventListener('keyup', keyUpEvent)
+        window.removeEventListener('keypress', keyPressEvent)
       }
     },
     []
@@ -42,9 +49,15 @@ function Keyboard() {
 
   return <div>
     <div className={ style.octaveDisplay }>
-      <button onClick={ () => dispatch(shiftOctave(-1)) }>-</button>
-      <div> { octave } </div>
-      <button onClick={ () => dispatch(shiftOctave(1)) } >+</button>
+      <div className="flex-row">
+        <button onClick={ () => dispatch(shiftOctave(-1)) }>-</button>
+        <span>Space</span>
+      </div>
+      <span> { octave } </span>
+      <div className="flex-row">
+        <span>Enter</span>
+        <button onClick={ () => dispatch(shiftOctave(1)) } >+</button>
+      </div>
     </div>
     <div className={ style.keyboard }>
       {
@@ -65,4 +78,4 @@ function Keyboard() {
 
 }
 
-export default Keyboard;
+export default Keyboard

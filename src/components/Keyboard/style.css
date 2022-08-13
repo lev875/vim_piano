@@ -18,7 +18,9 @@
   height: 2em;
 }
 
-.octaveDisplay div {
+.octaveDisplay span {
+  font-family: 'Source Code Pro', monospace;
+  margin: 0.5em;
   display: inline-grid;
   align-content: center;
   font-size: xxx-large;

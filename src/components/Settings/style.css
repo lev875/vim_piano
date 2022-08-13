@@ -8,6 +8,10 @@
   margin-top: 1em;
 }
 
+.innerContainer {
+  flex-direction: column;
+}
+
 .innerContainer input {
   margin-right: 0.5em;
 }
@@ -16,15 +20,10 @@
   width: 10em;
 }
 
-.column {
-  flex-direction: column !important;
-}
-
 .hidden {
   display: none;
 }
 
 .open {
   display: flex;
-  flex-direction: column;
 }

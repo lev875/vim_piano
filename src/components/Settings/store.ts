@@ -26,6 +26,7 @@ const initialState: Config =
       volume: 50,
       sustain: 1200, // ms
       sustainStepness: 1.3,
+      showKeys: true,
       isDebug: false,
       waveForm: {
         imag: [0,1,1,1,1,1,1],

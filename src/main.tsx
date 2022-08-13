@@ -1,13 +1,18 @@
-import react from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 import App from "./components/App"
 import { Provider } from 'react-redux'
 import store from "./store/store"
 import "./style.css"
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
-  document.getElementById('root')
-)
+const rootElement = document.getElementById('root')
+
+rootElement
+  ? createRoot(rootElement).render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App/>
+      </Provider>
+    </React.StrictMode>
+  )
+  : console.error("Root element is null!")

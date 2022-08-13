@@ -1,9 +1,9 @@
 import { generateArray } from "../../util"
 import type { Config } from "../Settings/store"
 
-const AudioContext = window.AudioContext // || window.webkitAudioContext;
+const AudioContext = window.AudioContext
 
-export const context = new AudioContext()
+const context = new AudioContext()
 
 const globalGain = new GainNode(context, { gain: 0.5 })
 globalGain.connect(context.destination)

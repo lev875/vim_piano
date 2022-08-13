@@ -1,17 +1,11 @@
-export interface Props {
-  name: string
-  button: string
-  frequency: number
-  isPlaying: boolean
-  isPressed: boolean
-}
-
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { selectConfig } from "../../Settings/store"
 import { configureContext, NodeAndGain, resume } from "../logic"
-import DebugKey from "./DebugKey"
 import style from "./style.css"
+
+import type { Props } from "./Props"
+import DebugInfo from "./DebugInfo"
 
 export const isBlackNote = (name: string) => name[name.length - 1] === '#'
 
@@ -36,7 +30,8 @@ function Key({ name, button, isPlaying, frequency, isPressed }: Props) {
         stop(node)
         setNode(null)
       }
-    }
+    },
+    [node, isPressed]
   )
 
   // TODO: Fix this mess
@@ -56,23 +51,33 @@ function Key({ name, button, isPlaying, frequency, isPressed }: Props) {
   //   [node,isPlaying,isPressed]
   // )
 
-  return config.isDebug
-    ? <DebugKey
+  return <div
+    className={
+      [
+        style.key,
+        isBlack ? style.black : style.white,
+        isPressed ? style.pressed : ""
+      ].join(" ")
+    }
+    style={{
+      justifyContent: config.isDebug ? "space-between" : "flex-end"
+    }}
+  >
+      <DebugInfo
         name={ name }
         button={ button }
         frequency={ frequency }
         isPlaying={ isPlaying }
         isPressed={ isPressed }
       />
-    : <div className={
-      [
-        style.key,
-        isBlack ? style.black : style.white,
-        isPressed ? style.pressed : ""
-      ].join(" ")
-    }>
-      <span>{button.slice(3)}</span>
-    </div>
+      <span>{ button.slice(3) }</span>
+      {/* { isBlack TODO: More realistic keys
+        ? <div>
+          <div></div>
+          <div></div>
+        </div>
+        : null } */}
+  </div>
 }
 
 

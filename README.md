@@ -6,5 +6,6 @@
 - Add keybindings settings
 - Use CSS preprocessing
 - Add different themes?
-- Decompose components
 - Input validation
+- Visaulisations using AnalyserNode?
+- Migrate to Preact?

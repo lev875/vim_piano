@@ -2,8 +2,8 @@ import style from "./style.css"
 
 import { useDispatch } from "react-redux"
 
-import { addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm } from "../store"
-import { ChangeEvent } from "react"
+import { addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm } from "../../store"
+import { FormEvent } from "react"
 
 const NAMES = new Map([
   [ "imag", "Imaginary" ],
@@ -20,9 +20,12 @@ function ArrayView({ component, array }: Arguments) {
   const name = NAMES.get(component)
   const dispatch = useDispatch()
 
-  const change = (e: ChangeEvent<HTMLInputElement>, index: number) =>
+  const change = (
+    e: FormEvent<HTMLInputElement>,
+    index: number
+  ) =>
     dispatch(changeCustomWaveTerm(
-      { component, index, new: parseFloat(e.target.value) }
+      { component, index, new: parseFloat((e.target as HTMLInputElement).value) }
     ))
 
   return <div className={ style["flex-row"] }>
@@ -35,7 +38,7 @@ function ArrayView({ component, array }: Arguments) {
           <input
             key={i}
             className={ style.input }
-            onChange={ e => change(e,i) }
+            onInput={ e => change(e,i) }
             type={ "number" }
             step={ 0.01 }
             value={ v }/>
