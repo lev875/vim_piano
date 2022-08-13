@@ -15,4 +15,3 @@ tasks:
     interactive: true
     cmds:
     - docker compose exec app bash
-    
