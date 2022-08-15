@@ -5,7 +5,7 @@ import style from "./style.css"
 
 import Key from "./Key/Key"
 
-import { play, stop, selectKeys, liftKey, shiftOctave, selectOctave } from "./store"
+import { selectKeys, pressKey, liftKey, shiftOctave, selectOctave } from "./store"
 import { dispatchTimeout as _dispatchTimeout} from "../../util"
 import { selectConfig } from "../Settings/store"
 
@@ -15,7 +15,6 @@ function Keyboard() {
   const keys            = useSelector(selectKeys)
   const dispatch        = useDispatch()
   const { sustain }     = useSelector(selectConfig)
-  const dispatchTimeout = _dispatchTimeout(dispatch)
 
   useEffect(
     () => {
@@ -30,21 +29,25 @@ function Keyboard() {
           dispatch(shiftOctave(1) )
         }
       }
-      const keyDownEvent = ({ code }: KeyboardEvent) => dispatch(play(code))
-      const keyUpEvent = ({ code }: KeyboardEvent) => {
-        dispatch(liftKey(code))
-        dispatchTimeout(sustain, stop(code))
-      }
+      const keyDownEvent = ({ code }: KeyboardEvent) => dispatch(pressKey(code))
       window.addEventListener('keydown', keyDownEvent)
-      window.addEventListener('keyup', keyUpEvent)
       window.addEventListener('keypress', keyPressEvent)
       return () => {
         window.removeEventListener('keydown', keyDownEvent)
-        window.removeEventListener('keyup', keyUpEvent)
         window.removeEventListener('keypress', keyPressEvent)
       }
     },
     []
+  )
+  useEffect(
+    () => {
+      const keyUpEvent = ({ code }: KeyboardEvent) => {
+        dispatch(liftKey(code))
+      }
+      window.addEventListener('keyup', keyUpEvent)
+      return () => window.removeEventListener('keyup', keyUpEvent)
+    },
+    [sustain]
   )
 
   return <div>
@@ -62,15 +65,7 @@ function Keyboard() {
     <div className={ style.keyboard }>
       {
         keys.map(
-          ({ name, button, frequency, isPlaying, isPressed }, i ) =>
-            <Key
-              key={i}
-              name={name}
-              button={button}
-              frequency={frequency}
-              isPlaying={isPlaying}
-              isPressed={isPressed}
-            />
+          (key, i) => <Key key={ i } { ...key } />
         )
       }
     </div>

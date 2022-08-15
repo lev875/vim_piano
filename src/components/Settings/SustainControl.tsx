@@ -1,22 +1,31 @@
-import { FormEventHandler } from "react"
+import { ChangeEventHandler, FocusEventHandler } from "react"
 
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { changeSustain, selectConfig } from "./store"
+
+const MIN = 50
 
 function SustainControl() {
 
   const { sustain } = useSelector(selectConfig)
   const dispatch = useDispatch()
 
-  const changeSustainHandler: FormEventHandler<HTMLInputElement> =
+  const changeSustainHandler: ChangeEventHandler<HTMLInputElement> =
     ({ currentTarget }) => {
       const value = parseInt(currentTarget.value)
-      if (value < 1) {
+      if (!value || value < MIN)
+        return
+      dispatch(changeSustain(value))
+    }
+
+  const inputValidator: FocusEventHandler<HTMLInputElement> =
+    ({ currentTarget }) => {
+      const parsedValue = parseInt(currentTarget.value)
+      if (!parsedValue || parsedValue < MIN) {
         currentTarget.value = sustain.toString()
         return
       }
-      dispatch(changeSustain(value))
     }
 
   return <div>
@@ -24,9 +33,10 @@ function SustainControl() {
     <input
       type="number"
       defaultValue={ sustain }
-      min={ 50 }
+      min={ MIN }
       step={ 50 }
-      onInput={ changeSustainHandler }
+      onChange={ changeSustainHandler }
+      onBlur={ inputValidator }
     />
     <span> ms</span>
   </div>

@@ -1,13 +1,14 @@
-.flex-row {
-  display: flex;
-  flex-direction: row;
+.container {
   margin-left: 1em;
+  margin-bottom: 0.5em;
 }
 
-.input {
+.container input {
   width: 4em;
 }
 
-.span {
-  width: 10em;
+.smallButton {
+  min-height: 2em;
+  min-width:  2em;
+  margin-right: 0.5em;
 }

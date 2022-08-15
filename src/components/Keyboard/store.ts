@@ -5,21 +5,21 @@ import { RootState } from "../../store/util"
 export const keyFrequency = (n: number) => Math.pow(2, (n - 58) / 12) * 440
 
 const keys = [
-  { name: 'C', button: 'KeyA' }, { name: 'C#', button: 'KeyW' },
-  { name: 'D', button: 'KeyS' }, { name: 'D#', button: 'KeyE' },
-  { name: 'E', button: 'KeyD' },
-  { name: 'F', button: 'KeyF' }, { name: 'F#', button: 'KeyU' },
-  { name: 'G', button: 'KeyJ' }, { name: 'G#', button: 'KeyI' },
-  { name: 'A', button: 'KeyK' }, { name: 'A#', button: 'KeyO' },
-  { name: 'B', button: 'KeyL' }
+  { name: 'C', button: 'KeyA', isBlack: false }, { name: 'C#', button: 'KeyW', isBlack: true },
+  { name: 'D', button: 'KeyS', isBlack: false }, { name: 'D#', button: 'KeyE', isBlack: true },
+  { name: 'E', button: 'KeyD', isBlack: false },
+  { name: 'F', button: 'KeyF', isBlack: false }, { name: 'F#', button: 'KeyU', isBlack: true },
+  { name: 'G', button: 'KeyJ', isBlack: false }, { name: 'G#', button: 'KeyI', isBlack: true },
+  { name: 'A', button: 'KeyK', isBlack: false }, { name: 'A#', button: 'KeyO', isBlack: true },
+  { name: 'B', button: 'KeyL', isBlack: false }
 ]
 
-interface Key {
+export interface Key {
   frequency: number
   isPressed: boolean
-  isPlaying: boolean
   name: string
   button: string
+  isBlack: boolean
 }
 
 interface State {
@@ -36,30 +36,18 @@ const initialState: State = {
           ({
             ...key,
             frequency: keyFrequency(startingOctave * 12 + i + 1),
-            isPlaying: false,
             isPressed: false
           })
       )
 }
 
-const playReducer = ( state: State, action: PayloadAction<string> ) => ({
+const pressKeyReducer = ( state: State, action: PayloadAction<string> ) => ({
   ...state,
   keys: state.keys
     .map(
       key =>
         key.button === action.payload
-          ? { ...key, isPlaying: true, isPressed: true }
-          : key
-    )
-})
-
-const stopReducer = ( state: State, { payload }: PayloadAction<string> ) => ({
-  ...state,
-  keys: state.keys
-    .map(
-      key =>
-        key.button === payload
-          ? { ...key, isPlaying: false }
+          ? { ...key, isPressed: true }
           : key
     )
 })
@@ -98,14 +86,14 @@ export const keyboardSlice = createSlice({
   name: 'keyboard',
   initialState,
   reducers: {
-    play: playReducer,
-    stop: stopReducer,
+    pressKey: pressKeyReducer,
     liftKey: liftKeyReducer,
     shiftOctave: shiftOctaveReducer
   }
 })
 
-export const { play, stop, liftKey, shiftOctave } = keyboardSlice.actions
+export const { pressKey, liftKey, shiftOctave }
+  = keyboardSlice.actions
 
 export const selectKeys = (state: RootState) => state.keyboard.keys
 export const selectOctave = (state: RootState) => state.keyboard.octave

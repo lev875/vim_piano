@@ -54,9 +54,6 @@ const play = (config: Config) => (freq: number) => {
   return { node, gain: gainNode } as NodeAndGain
 }
 
-export const resume = ({ gain: gainNode }: NodeAndGain ) =>
-  gainNode.gain.cancelScheduledValues(context.currentTime)
-
 const stop = (config: Config) => ({ node, gain: gainNode }: NodeAndGain) => {
   const sustainDuration = config.sustain / 1000
   const currentTime = context.currentTime

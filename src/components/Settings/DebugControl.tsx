@@ -9,7 +9,7 @@ function DebugControl() {
   return <div>
     <span>Debug: </span>
     <input
-      type={"checkbox"}
+      type="checkbox"
       defaultChecked={ isDebug }
       onChange={ ({ target: { checked } }) =>
         { dispatch(setDebugState(checked)) }

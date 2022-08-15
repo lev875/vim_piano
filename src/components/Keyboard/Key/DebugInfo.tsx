@@ -1,14 +1,15 @@
 import { useSelector } from "react-redux"
 import { selectConfig } from "../../Settings/store"
-import type { Props } from "./Props"
+import type { Key as Props } from "../store"
 
-function DebugInfo({ name, button, frequency, isPlaying, isPressed }: Props) {
+function DebugInfo({ name, button, frequency, isPressed }: Props) {
 
   const { isDebug } = useSelector(selectConfig)
 
   return isDebug
     ? <div style={{
-        fontSize: "initial"
+        fontSize: "initial",
+        textAlign: "start"
     }}>
       <div>
         <span>Name: {name} </span>
@@ -20,7 +21,6 @@ function DebugInfo({ name, button, frequency, isPlaying, isPressed }: Props) {
         <span>Frequency: {frequency.toFixed(2)}</span>
       </div>
       <div className="flex-column">
-        { isPlaying && <span>Playing</span> }
         { isPressed && <span>Pressed</span> }
       </div>
     </div>

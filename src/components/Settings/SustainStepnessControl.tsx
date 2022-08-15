@@ -2,6 +2,8 @@ import { FormEventHandler } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { changeSustainStepness, selectConfig } from "./store"
 
+const MIN = 1
+
 function SusteainStepnessControl() {
 
   const dispatch = useDispatch()
@@ -10,11 +12,18 @@ function SusteainStepnessControl() {
   const changeSustainStepnessHandler: FormEventHandler<HTMLInputElement> =
     ({ currentTarget }) => {
       const value = parseFloat(currentTarget.value)
-      if (value < 1) {
+      if (!value || value < MIN)
+        return
+      dispatch(changeSustainStepness(value))
+    }
+
+  const inputValidator: FormEventHandler<HTMLInputElement> =
+    ({ currentTarget }) => {
+      const value = parseFloat(currentTarget.value)
+      if (!value || value < MIN) {
         currentTarget.value = sustainStepness.toString()
         return
       }
-      dispatch(changeSustainStepness(value))
     }
 
   return <div>
@@ -22,9 +31,10 @@ function SusteainStepnessControl() {
     <input
       type="number"
       defaultValue={ sustainStepness }
-      min={1}
-      step={0.01}
-      onInput={ changeSustainStepnessHandler }
+      min={ MIN }
+      step={ 0.01 }
+      onChange={ changeSustainStepnessHandler }
+      onBlur={ inputValidator }
     />
   </div>
 }

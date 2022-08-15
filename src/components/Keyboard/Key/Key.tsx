@@ -1,55 +1,36 @@
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { selectConfig } from "../../Settings/store"
-import { configureContext, NodeAndGain, resume } from "../logic"
+import { configureContext, NodeAndGain } from "../logic"
 import style from "./style.css"
 
-import type { Props } from "./Props"
+import type { Key as Props } from "../store"
 import DebugInfo from "./DebugInfo"
+import { useDispatch } from "react-redux"
+import { liftKey, pressKey } from "../store"
 
-export const isBlackNote = (name: string) => name[name.length - 1] === '#'
-
-function Key({ name, button, isPlaying, frequency, isPressed }: Props) {
+function Key({ name, button, frequency, isPressed, isBlack }: Props) {
 
   const config = useSelector(selectConfig)
+  const dispatch = useDispatch()
 
-  const [node, setNode] = useState<NodeAndGain | null>(null)
+  const [ node, setNode ] = useState<NodeAndGain | null>(null)
   const { play, stop } = useMemo(
     () => configureContext(config),
     [config]
   )
 
-  const isBlack = useMemo( () => isBlackNote(name), [ name ] )
-
   useEffect(
     () => {
       if (!node && isPressed) {
         setNode(play(frequency))
-      }
-      else if (node && !isPressed) {
+      } else if (node && !isPressed) {
         stop(node)
         setNode(null)
       }
     },
-    [node, isPressed]
+    [isPressed, node]
   )
-
-  // TODO: Fix this mess
-  // useEffect(
-  //   () => {
-  //     if (!node && isPressed && isPlaying) {
-  //       setNode( play(frequency) )
-  //     }
-  //     if (node && isPlaying) {
-  //       resume(node)
-  //     }
-  //     if (node && !isPlaying && !isPressed)
-  //       setNode(null)
-  //     if (node && !isPressed)
-  //       stop(node)
-  //   },
-  //   [node,isPlaying,isPressed]
-  // )
 
   return <div
     className={
@@ -62,17 +43,21 @@ function Key({ name, button, isPlaying, frequency, isPressed }: Props) {
     style={{
       justifyContent: config.isDebug ? "space-between" : "flex-end"
     }}
+    onMouseDown={ () => dispatch(pressKey(button)) }
+    onMouseEnter={ e => { if (e.buttons === 1) dispatch(pressKey(button)) }}
+    onMouseUp={ () => dispatch(liftKey(button)) }
+    onMouseLeave={ () => dispatch(liftKey(button)) }
   >
       <DebugInfo
         name={ name }
         button={ button }
         frequency={ frequency }
-        isPlaying={ isPlaying }
         isPressed={ isPressed }
+        isBlack={ isBlack }
       />
       <span>{ button.slice(3) }</span>
       {/* { isBlack TODO: More realistic keys
-        ? <div>
+        ? <div className={ style.pseudoKey }>
           <div></div>
           <div></div>
         </div>

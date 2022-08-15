@@ -89,7 +89,7 @@ const setDebugStateReducer = (state: Config, { payload }: PayloadAction<boolean>
 interface ChageWaveTermPayload {
   component: "imag" | "real",
   index: number,
-  new: number
+  newValue: number
 }
 
 const changeWaveTermReducer = (
@@ -97,6 +97,7 @@ const changeWaveTermReducer = (
   { payload }: PayloadAction<ChageWaveTermPayload>
 ) =>
   payload.index >= state.waveForm[payload.component].length
+  || !payload.newValue
     ? state
     : {
       ...state,
@@ -106,7 +107,7 @@ const changeWaveTermReducer = (
           replaceArrayEl(
             state.waveForm[payload.component],
             payload.index,
-            payload.new
+            payload.newValue
           )
       }
     }
