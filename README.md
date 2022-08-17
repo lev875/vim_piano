@@ -2,6 +2,8 @@
 
 ![Screenshot](./misc/screenshot.png)
 
+[Live Demo](https://lev875.github.io/vim_piano/)
+
 An online Piano you can play using vim-like key bindings
 
 ## Credits
