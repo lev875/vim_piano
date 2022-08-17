@@ -5,6 +5,7 @@ import VolumeControl from "./VolumeControl"
 import SustainControl from "./SustainControl"
 import SusteainStepnessControl from "./SustainStepnessControl"
 import DebugControl from "./DebugControl"
+import ReverbControl from "./ReverbControl"
 import WaveFormControl from "./CustomWaveControl/WaveFormControl"
 
 function Settings() {
@@ -20,6 +21,7 @@ function Settings() {
       <SustainControl/>
       <SusteainStepnessControl/>
       <WaveFormControl/>
+      <ReverbControl/>
       <DebugControl/>
     </div>
   </div>

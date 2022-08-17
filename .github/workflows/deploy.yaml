@@ -10,8 +10,9 @@ permissions:
 jobs:
 
   deploy:
-    # environment:
-    #   name: github-pages
+    name: Build and deploy
+    environment:
+      name: github-pages
     runs-on: ubuntu-22.04
     steps:
 
@@ -34,5 +35,5 @@ jobs:
         with:
           path: ./build
 
-      # - name: Deploy to GitHub Pages
-      #   uses: actions/deploy-pages@v1
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

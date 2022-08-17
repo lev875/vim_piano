@@ -1,35 +1,36 @@
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { selectConfig } from "../../Settings/store"
-import { configureContext, NodeAndGain } from "../logic"
+import { AudioPipeline, NodeAndGain, play, stop } from "../logic"
 import style from "./style.css"
 
-import type { Key as Props } from "../store"
+import type { Key as _Props } from "../store"
 import DebugInfo from "./DebugInfo"
 import { useDispatch } from "react-redux"
 import { liftKey, pressKey } from "../store"
 
-function Key({ name, button, frequency, isPressed, isBlack }: Props) {
+interface Props extends _Props {
+  pipeline: AudioPipeline | null
+}
+
+function Key({ name, button, frequency, isPressed, isBlack, pipeline }: Props) {
 
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
 
   const [ node, setNode ] = useState<NodeAndGain | null>(null)
-  const { play, stop } = useMemo(
-    () => configureContext(config),
-    [config]
-  )
 
   useEffect(
     () => {
+      if(!pipeline) return
       if (!node && isPressed) {
-        setNode(play(frequency))
+        setNode(play(pipeline)(frequency))
       } else if (node && !isPressed) {
-        stop(node)
+        stop(pipeline)(node)
         setNode(null)
       }
     },
-    [isPressed, node]
+    [isPressed, pipeline, node]
   )
 
   return <div

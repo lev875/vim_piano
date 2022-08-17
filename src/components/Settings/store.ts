@@ -8,6 +8,8 @@ export interface Config {
   sustain: number
   sustainStepness: number
   isDebug: boolean
+  reverbEnabled: boolean
+  reverbPreset: string
   waveForm: {
     imag: number[]
     real: number[]
@@ -28,6 +30,8 @@ const initialState: Config =
       sustainStepness: 1.3,
       showKeys: true,
       isDebug: false,
+      reverbEnabled: false,
+      reverbPreset: "large_church",
       waveForm: {
         imag: [0,1,1,1,1,1,1],
         real: [0,0,0,0,0,0,0]
@@ -86,6 +90,18 @@ const setDebugStateReducer = (state: Config, { payload }: PayloadAction<boolean>
     isDebug: payload
   })
 
+const setReverbStateReducer = (state: Config, { payload }: PayloadAction<boolean>) =>
+  ({
+    ...state,
+    reverbEnabled: payload
+  })
+
+const setReverbPresetReducer = (state: Config, { payload }: PayloadAction<string>) =>
+  ({
+    ...state,
+    reverbPreset: payload
+  })
+
 interface ChageWaveTermPayload {
   component: "imag" | "real",
   index: number,
@@ -124,7 +140,9 @@ export const configSlice = createSlice({
     addCustomWaveTerm: addWaveTermReducer,
     removeCustomWaveTerm: removeWaveTermReducer,
     changeCustomWaveTerm: changeWaveTermReducer,
-    setDebugState: setDebugStateReducer
+    setDebugState: setDebugStateReducer,
+    setReverbState: setReverbStateReducer,
+    setReverbPreset: setReverbPresetReducer
   }
 })
 
@@ -132,7 +150,7 @@ export const configSlice = createSlice({
 export const {
   changeWaveType, changeVolume, changeSustain, changeSustainStepness,
   addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm,
-  setDebugState
+  setDebugState, setReverbState, setReverbPreset
 } = configSlice.actions
 
 export const selectConfig = (state: RootState) => state.config
