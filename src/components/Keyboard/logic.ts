@@ -17,7 +17,7 @@ export interface AudioPipeline {
   reverb?: ConvolverNode
   waveFormConfig: OscillatorOptions
   sustain: number
-  sustainStepness: number
+  sustainSteepness: number
 }
 
 const AudioContext = window.AudioContext
@@ -80,11 +80,11 @@ export const stop = (pipeline: AudioPipeline) =>
   ({ node, gain: gainNode }: NodeAndGain) => {
     const sustainDuration = pipeline.sustain / 1000
     const currentTime = pipeline.audioContext.currentTime
-    if (pipeline.sustainStepness > 1) {
+    if (pipeline.sustainSteepness > 1) {
       const array = Float32Array.from(
         generateArray(15)
           .map(i => i - 15)
-          .map(i => Math.pow(pipeline.sustainStepness,i))
+          .map(i => Math.pow(pipeline.sustainSteepness,i))
           .reverse()
       )
       gainNode.gain.setValueCurveAtTime(array, currentTime, sustainDuration)
@@ -130,7 +130,7 @@ const defaultPipeline = (config: Config, context: AudioContext) =>
     volumeNode: createGainNode(context, config.volume / 100, context.destination),
     waveFormConfig: createConfig(config, context),
     sustain: config.sustain,
-    sustainStepness: config.sustainStepness
+    sustainSteepness: config.sustainSteepness
   })
 
 export const initializePipeline: (config: Config) => Promise<AudioPipeline> = config => {
@@ -160,7 +160,7 @@ export const initializePipeline: (config: Config) => Promise<AudioPipeline> = co
             reverb: createReverb(context, buffer, volumeNode),
             waveFormConfig: createConfig(config, context),
             sustain: config.sustain,
-            sustainStepness: config.sustainStepness
+            sustainSteepness: config.sustainSteepness
           })
         })
         .catch(

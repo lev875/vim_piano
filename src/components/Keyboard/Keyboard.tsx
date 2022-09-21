@@ -6,7 +6,6 @@ import style from "./style.css"
 import Key from "./Key/Key"
 
 import { selectKeys, pressKey, liftKey, shiftOctave, selectOctave } from "./store"
-import { dispatchTimeout as _dispatchTimeout} from "../../util"
 import { selectConfig } from "../Settings/store"
 import { AudioPipeline, initializePipeline } from "./logic"
 

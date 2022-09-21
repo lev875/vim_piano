@@ -1,42 +1,42 @@
 import { FormEventHandler } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { changeSustainStepness, selectConfig } from "./store"
+import { changesustainSteepness, selectConfig } from "./store"
 
 const MIN = 1
 
-function SusteainStepnessControl() {
+function SusteainSteepnessControl() {
 
   const dispatch = useDispatch()
-  const { sustainStepness } = useSelector(selectConfig)
+  const { sustainSteepness } = useSelector(selectConfig)
 
-  const changeSustainStepnessHandler: FormEventHandler<HTMLInputElement> =
+  const changesustainSteepnessHandler: FormEventHandler<HTMLInputElement> =
     ({ currentTarget }) => {
       const value = parseFloat(currentTarget.value)
       if (!value || value < MIN)
         return
-      dispatch(changeSustainStepness(value))
+      dispatch(changesustainSteepness(value))
     }
 
   const inputValidator: FormEventHandler<HTMLInputElement> =
     ({ currentTarget }) => {
       const value = parseFloat(currentTarget.value)
       if (!value || value < MIN) {
-        currentTarget.value = sustainStepness.toString()
+        currentTarget.value = sustainSteepness.toString()
         return
       }
     }
 
   return <div>
-    <span>Sustain stepness: </span>
+    <span>Sustain steepness: </span>
     <input
       type="number"
-      defaultValue={ sustainStepness }
+      defaultValue={ sustainSteepness }
       min={ MIN }
       step={ 0.01 }
-      onChange={ changeSustainStepnessHandler }
+      onChange={ changesustainSteepnessHandler }
       onBlur={ inputValidator }
     />
   </div>
 }
 
-export default SusteainStepnessControl
+export default SusteainSteepnessControl

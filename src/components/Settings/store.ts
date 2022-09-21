@@ -6,7 +6,7 @@ export interface Config {
   type: OscillatorType
   volume: number
   sustain: number
-  sustainStepness: number
+  sustainSteepness: number
   isDebug: boolean
   reverbEnabled: boolean
   reverbPreset: string
@@ -27,7 +27,7 @@ const initialState: Config =
       type: "sine" as OscillatorType,
       volume: 50,
       sustain: 1200, // ms
-      sustainStepness: 1.3,
+      sustainSteepness: 1.3,
       showKeys: true,
       isDebug: false,
       reverbEnabled: false,
@@ -50,11 +50,11 @@ const changeSustainReducer = (state: Config, { payload }: PayloadAction<number>)
     sustain: payload
   })
 
-const changeSustainStepnessReducer = (state: Config, { payload }: PayloadAction<number>) =>
+const changesustainSteepnessReducer = (state: Config, { payload }: PayloadAction<number>) =>
   payload >= 1
     ? {
       ...state,
-      sustainStepness: payload
+      sustainSteepness: payload
     }
     : state
 
@@ -136,7 +136,7 @@ export const configSlice = createSlice({
     changeWaveType: waveTypeReducer,
     changeVolume: changeVolumeReducer,
     changeSustain: changeSustainReducer,
-    changeSustainStepness: changeSustainStepnessReducer,
+    changesustainSteepness: changesustainSteepnessReducer,
     addCustomWaveTerm: addWaveTermReducer,
     removeCustomWaveTerm: removeWaveTermReducer,
     changeCustomWaveTerm: changeWaveTermReducer,
@@ -148,7 +148,7 @@ export const configSlice = createSlice({
 
 
 export const {
-  changeWaveType, changeVolume, changeSustain, changeSustainStepness,
+  changeWaveType, changeVolume, changeSustain, changesustainSteepness,
   addCustomWaveTerm, removeCustomWaveTerm, changeCustomWaveTerm,
   setDebugState, setReverbState, setReverbPreset
 } = configSlice.actions
